@@ -1,7 +1,7 @@
 {
-  "name": "cordova-plugin-momo-wallet",
+  "name": "MomoWallet",
   "version": "0.0.1",
-  "description": "ionic cordova plugin  payment app to app momo wallet",
+  "description": "payment momo app to app",
   "cordova": {
     "id": "cordova-plugin-momo-wallet",
     "platforms": [

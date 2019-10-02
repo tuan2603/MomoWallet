@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-momo-wallet" version="0.0.1">
-   <name>MomoWallet</name>
-   <js-module name="MomoWallet" src="www/MomoWallet.js">
-      <clobbers target="cordova.plugins.MomoWallet" />
-   </js-module>
-   <platform name="android">
-      <config-file parent="/*" target="res/xml/config.xml">
-         <feature name="MomoWallet">
-            <param name="android-package" value="cordova-plugin-momo-wallet.MomoWallet" />
-         </feature>
-      </config-file>
-      <config-file parent="/*" target="AndroidManifest.xml" />
-      <source-file src="src/android/MomoWallet.java" target-dir="src/cordova-plugin-momo-wallet/MomoWallet" />
-   </platform>
-   <platform name="ios">
-      <config-file parent="/*" target="config.xml">
-         <feature name="MomoWallet">
-            <param name="ios-package" value="MomoWallet" />
-         </feature>
-      </config-file>
-      <source-file src="src/ios/MomoWallet.m" />
-   </platform>
+<plugin
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+id="cordova-plugin-momo-wallet" version="0.0.1">
+    
+    <name>MomoWallet</name>
+
+    <js-module name="MomoWallet" src="www/MomoWallet.js">
+        <clobbers target="cordova.plugins.MomoWallet" />
+    </js-module>
+    
+    <engines>
+        <engine name="cordova" version=">=4.0.0"/>
+    </engines>
+
+
+    <!-- begin android -->
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="MomoWallet">
+                <param name="android-package" value="com.trantuan.MomoWallet" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml" />
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+         </config-file>
+
+        <source-file src="src/android/MomoWallet.java" target-dir="src/com/trantuant/MomoWallet" />
+
+        <framework src="com.github.momodevelopment:androidsdkV2.2:2.3" />
+
+        <framework src="src/android/MomoWallet.gradle" custom="true" type="gradleReference"/>
+
+    </platform>
+    
+    <!-- begin  ios -->
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="MomoWallet">
+                <param name="ios-package" value="MomoWallet" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/MomoWallet.m" />
+    </platform>
 </plugin>
