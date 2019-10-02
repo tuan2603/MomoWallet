@@ -1,0 +1,27 @@
+{
+  "name": "cordova-plugin-momo-wallet",
+  "version": "0.0.1",
+  "description": "ionic cordova plugin  payment app to app momo wallet",
+  "cordova": {
+    "id": "cordova-plugin-momo-wallet",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuan2603/MomoWallet.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "Tran Minh Tuan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuan2603/MomoWallet/issues"
+  },
+  "homepage": "https://github.com/tuan2603/MomoWallet#readme"
+}
