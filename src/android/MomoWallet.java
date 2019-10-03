@@ -74,17 +74,23 @@ public class MomoWallet extends CordovaPlugin {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
+        
+         // Example extra data
+         JSONObject objRequestData = new JSONObject();
 
         if ( args != null ) {
+           
             try {
-                this.amount  = args.getJSONOject(0).getString("amout").toString();
-                this.merchantName  = args.getJSONOject(0).getString("merchantName").toString();
-                this.merchantCode  = args.getJSONOject(0).getString("merchantCode").toString();
-                this.orderId  = args.getJSONOject(0).getString("orderId").toString();
-                this.orderLabel  = args.getJSONOject(0).getString("orderLabel").toString();
-                this.merchantNameLabel  = args.getJSONOject(0).getString("merchantNameLabel").toString();
-                this.total_fee  = args.getJSONOject(0).getString("total_fee").toString();
-                this.description  = args.getJSONOject(0).getString("description").toString();
+                objRequestData = args.getJSONOject(0); 
+
+                this.amount  = objRequestData.getString("amout").toString();
+                this.merchantName  = objRequestData.getString("merchantName").toString();
+                this.merchantCode  = objRequestData.getString("merchantCode").toString();
+                this.orderId  = objRequestData.getString("orderId").toString();
+                this.orderLabel  = objRequestData.getString("orderLabel").toString();
+                this.merchantNameLabel  = objRequestData.getString("merchantNameLabel").toString();
+                this.total_fee  = objRequestData.getString("total_fee").toString();
+                this.description  = objRequestData.getString("description").toString();
                 // this.objExtraData  =  args.getJSONOject(0).getJSONOject("extraData");
 
             }catch( Exception ex) {
