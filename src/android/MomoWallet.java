@@ -33,13 +33,13 @@ import vn.momo.momo_partner.MoMoParameterNamePayment;
  */
 public class MomoWallet extends CordovaPlugin {
 
-    private String amount = "10000";
-    private String fee = "0";
-    int environment = 0;// developer default
-    private String merchantName = "Demo SDK";
-    private String merchantCode = "SCB01";
-    private String merchantNameLabel = "Nhà cung cấp";
-    private String description = "Thanh toán dịch vụ ABC";
+    public String amount = "10000";
+    public String fee = "0";
+    public int environment = 0;// developer default
+    public String merchantName = "Demo SDK";
+    public String merchantCode = "SCB01";
+    public String merchantNameLabel = "Nhà cung cấp";
+    public String description = "Thanh toán dịch vụ ABC";
 
     private CallbackContext callbackContext;
 
@@ -119,12 +119,12 @@ public class MomoWallet extends CordovaPlugin {
             objExtraData.put("movie_format", "2D");
         } catch (JSONException e) {
             e.printStackTrace();
-            callbackContext.error( e.printStackTrace().toString());
+            callbackContext.error( e.printStackTrace());
         }
         eventValue.put("extraData", objExtraData.toString());
 
         eventValue.put("extra", "");
-        AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue);
+        AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
 
     }
 
