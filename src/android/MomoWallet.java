@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.widget.Toast;
+import jdk.nashorn.internal.parser.JSONParser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class MomoWallet extends CordovaPlugin {
     private String merchantCode = "SCB01";
     private String description = "Thanh toán dịch vụ ABC";
     private String merchantNameLabel = "Dịch vụ";
+    private String orderId  = "000003232";
     private String orderLabel = "Mã đơn hàng";
 
     private CallbackContext callbackContext;
@@ -87,15 +90,15 @@ public class MomoWallet extends CordovaPlugin {
 
         if ( args != null ) {
             try {
-                this.amount  = Integer.parseInt(args.getJSONOject(0).getString("amout"));
-                this.merchantName  = args.getJSONOject(0).getString("merchantName");
-                this.merchantCode  = args.getJSONOject(0).getString("merchantCode");
-                this.orderId  = args.getJSONOject(0).getString("orderId");
-                this.orderLabel  = args.getJSONOject(0).getString("orderLabel");
-                this.merchantNameLabel  = args.getJSONOject(0).getString("merchantNameLabel");
-                this.total_fee  = args.getJSONOject(0).getString("total_fee");
-                this.description  = args.getJSONOject(0).getString("description");
-                this.objExtraData  = args.getJSONOject(0).getJSONOject("extraData");
+                this.amount  = args.getJSONOject(0).getString("amout").toString();
+                this.merchantName  = args.getJSONOject(0).getString("merchantName").toString();
+                this.merchantCode  = args.getJSONOject(0).getString("merchantCode").toString();
+                this.orderId  = args.getJSONOject(0).getString("orderId").toString();
+                this.orderLabel  = args.getJSONOject(0).getString("orderLabel").toString();
+                this.merchantNameLabel  = args.getJSONOject(0).getString("merchantNameLabel").toString();
+                this.total_fee  = args.getJSONOject(0).getString("total_fee").toString();
+                this.description  = args.getJSONOject(0).getString("description").toString();
+                // this.objExtraData  =  args.getJSONOject(0).getJSONOject("extraData");
 
             }catch( Exception ex) {
                 this.callbackContext.error("loi json oblect");
