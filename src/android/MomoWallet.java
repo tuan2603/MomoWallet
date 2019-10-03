@@ -34,7 +34,7 @@ import vn.momo.momo_partner.MoMoParameterNamePayment;
 public class MomoWallet extends CordovaPlugin {
 
     public String amount = "10000";
-    public String fee = "0";
+    public String total_fee = "0";
     public int environment = 0;// developer default
     public String merchantName = "Demo SDK";
     public String merchantCode = "SCB01";
@@ -83,7 +83,7 @@ public class MomoWallet extends CordovaPlugin {
         
 
         if (edAmount.toString()  != null && edAmount.toString().length() > 0) {
-            mount = edAmount.toString();
+            amount = edAmount.toString();
             
         } else {
             callbackContext.error("mount one non-empty string argument.");
@@ -96,7 +96,7 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("merchantname", merchantName); // Tên đối tác. được đăng ký tại https://business.momo.vn. VD:
                                                       // Google, Apple, Tiki , CGV Cinemas
         eventValue.put("merchantcode", merchantCode); // Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
-        eventValue.put("amount", total_amount); // Kiểu integer
+        eventValue.put("amount", amount); // Kiểu integer
         eventValue.put("orderId", "orderId123456789"); // uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
         eventValue.put("orderLabel", "Mã đơn hàng"); // gán nhãn
 
@@ -119,7 +119,7 @@ public class MomoWallet extends CordovaPlugin {
             objExtraData.put("movie_format", "2D");
         } catch (JSONException e) {
             e.printStackTrace();
-            callbackContext.error( e.printStackTrace());
+            callbackContext.error("loi json oblect");
         }
         eventValue.put("extraData", objExtraData.toString());
 
