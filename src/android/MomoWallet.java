@@ -55,7 +55,7 @@ public class MomoWallet extends CordovaPlugin {
  
 
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    private boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         
      
@@ -70,23 +70,10 @@ public class MomoWallet extends CordovaPlugin {
    
 
     // Get token through MoMo app
-    public void requestPayment(JSONArray args) {
+    private void requestPayment(JSONArray args) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
-        // Example extra data
-        JSONObject objExtraData = new JSONObject();
-
-        try {
-            objExtraData.put("site_code", "008");
-            objExtraData.put("site_name", "CGV Cresent Mall");
-            objExtraData.put("screen_code", 0);
-            objExtraData.put("screen_name", "Special");
-            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
-            objExtraData.put("movie_format", "2D");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         if ( args != null ) {
             try {
@@ -104,6 +91,8 @@ public class MomoWallet extends CordovaPlugin {
                 this.callbackContext.error("loi json oblect");
             }
         }
+
+
 
 
        
@@ -127,6 +116,19 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("partnerCode", this.merchantCode );
 
 
+        // Example extra data
+        JSONObject objExtraData = new JSONObject();
+
+        try {
+            objExtraData.put("site_code", "008");
+            objExtraData.put("site_name", "CGV Cresent Mall");
+            objExtraData.put("screen_code", 0);
+            objExtraData.put("screen_name", "Special");
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+            objExtraData.put("movie_format", "2D");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         
         
         eventValue.put("extraData", objExtraData.toString());
@@ -138,7 +140,7 @@ public class MomoWallet extends CordovaPlugin {
     }
 
     // Get token callback from MoMo app an submit to server side
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    private void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             if (data != null) {
