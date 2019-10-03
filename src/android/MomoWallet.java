@@ -33,13 +33,14 @@ import vn.momo.momo_partner.MoMoParameterNamePayment;
  */
 public class MomoWallet extends CordovaPlugin {
 
-    public String amount = "10000";
-    public String total_fee = "0";
-    public int environment = 0;// developer default
-    public String merchantName = "Demo SDK";
-    public String merchantCode = "SCB01";
-    public String merchantNameLabel = "Nhà cung cấp";
-    public String description = "Thanh toán dịch vụ ABC";
+    private String amount = "10000";
+    private String total_fee = "0";
+    private int environment = 0;// developer default
+    private String merchantName = "MoMo";
+    private String merchantCode = "SCB01";
+    private String description = "Thanh toán dịch vụ ABC";
+    private String merchantNameLabel = "Dịch vụ";
+    private String orderLabel = "Mã đơn hàng";
 
     private CallbackContext callbackContext;
 
@@ -53,61 +54,61 @@ public class MomoWallet extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
-        if (action.equals("coolMethod")) {
-            this.coolMethod("Tran Minh Tuan",callbackContext);
-            return true;
-         }
+        
      
          if (action.equals("requestPayment")) {
-            String edAmount = args.getString(0);
-            this.requestPayment(edAmount, callbackContext);
+            this.requestPayment(args);
             return true;
          }
     
          return false;
     }
 
-    public void coolMethod(String message, CallbackContext callbackContext) {
-
-        if (message != null && message.length() > 0) {
-            callbackContext.success(message);
-        } else {
-            callbackContext.error("Expected one non-empty string argument.");
-        }
-    }
+   
 
     // Get token through MoMo app
-    public void requestPayment(String edAmount, CallbackContext callbackContext) {
+    public void requestPayment(JSONArray args) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
+        if ( args != null ) {
+            try {
+                this.amount  = Integer.parseInt(args.getJSONOject(0).getString("amout"));
+                this.merchantName  = args.getJSONOject(0).getString("merchantName");
+                this.merchantCode  = args.getJSONOject(0).getString("merchantCode");
+                this.orderId  = args.getJSONOject(0).getString("orderId");
+                this.orderLabel  = args.getJSONOject(0).getString("orderLabel");
+                this.merchantNameLabel  = args.getJSONOject(0).getString("merchantNameLabel");
+                this.total_fee  = args.getJSONOject(0).getString("total_fee");
+                this.description  = args.getJSONOject(0).getString("description");
 
-        if (edAmount.toString()  != null && edAmount.toString().length() > 0) {
-            amount = edAmount.toString();
-            
-        } else {
-            callbackContext.error("mount one non-empty string argument.");
+            }catch( Exception ex) {
+                this.callbackContext.error("loi json oblect");
+            }
         }
+
 
        
 
         Map<String, Object> eventValue = new HashMap<>();
         // client Required
-        eventValue.put("merchantname", merchantName); // Tên đối tác. được đăng ký tại https://business.momo.vn. VD:
+        eventValue.put("merchantname", this.merchantName); // Tên đối tác. được đăng ký tại https://business.momo.vn. VD:
                                                       // Google, Apple, Tiki , CGV Cinemas
-        eventValue.put("merchantcode", merchantCode); // Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
-        eventValue.put("amount", amount); // Kiểu integer
-        eventValue.put("orderId", "orderId123456789"); // uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
-        eventValue.put("orderLabel", "Mã đơn hàng"); // gán nhãn
+        eventValue.put("merchantcode", this.merchantCode); // Mã đối tác, được cung cấp bởi MoMo tại https://business.momo.vn
+        eventValue.put("amount", this.amount); // Kiểu integer
+        eventValue.put("orderId", this.orderId); // uniqueue id cho Bill order, giá trị duy nhất cho mỗi đơn hàng
+        eventValue.put("orderLabel", this.orderLabel); // gán nhãn
 
         // client Optional - bill info
-        eventValue.put("merchantnamelabel", "Dịch vụ");// gán nhãn
-        eventValue.put("fee", total_fee); // Kiểu integer
-        eventValue.put("description", description); // mô tả đơn hàng - short description
+        eventValue.put("merchantnamelabel", this.merchantNameLabel);// gán nhãn
+        eventValue.put("fee", this.total_fee); // Kiểu integer
+        eventValue.put("description", this.description); // mô tả đơn hàng - short description
 
         // client extra data
-        eventValue.put("requestId", merchantCode + "merchant_billId_" + System.currentTimeMillis());
-        eventValue.put("partnerCode", merchantCode);
+        eventValue.put("requestId", this.merchantCode + "merchant_billId_" + System.currentTimeMillis());
+        eventValue.put("partnerCode", this.merchantCode );
+
+
         // Example extra data
         JSONObject objExtraData = new JSONObject();
         try {
@@ -119,10 +120,11 @@ public class MomoWallet extends CordovaPlugin {
             objExtraData.put("movie_format", "2D");
         } catch (JSONException e) {
             e.printStackTrace();
-            callbackContext.error("loi json oblect");
+            this.callbackContext.error("this error database");
         }
         eventValue.put("extraData", objExtraData.toString());
-
+        eventValue.put("requestType", "payment");
+        eventValue.put("language", "vi");
         eventValue.put("extra", "");
         AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
 
