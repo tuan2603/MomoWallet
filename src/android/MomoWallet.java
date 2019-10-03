@@ -157,8 +157,8 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("language", "vi");
         eventValue.put("extra", "");
 
-        cordova.setActivityResultCallback(cordova.getActivity());
-        AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
+        cordova.setActivityResultCallback(MomoWallet.this);
+        AppMoMoLib.getInstance().requestMoMoCallBack(MomoWallet.this, eventValue);
 
 
 
@@ -223,9 +223,6 @@ public class MomoWallet extends CordovaPlugin {
         }
     }
 
-    public Bundle onSaveInstanceState() {
-        Log.d("requestpayment", "7");
-    }
 
     /**
      * Called when a plugin is the recipient of an Activity result after the
