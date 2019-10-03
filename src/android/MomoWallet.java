@@ -71,6 +71,20 @@ public class MomoWallet extends CordovaPlugin {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
+        // Example extra data
+        JSONObject objExtraData = new JSONObject();
+
+        try {
+            objExtraData.put("site_code", "008");
+            objExtraData.put("site_name", "CGV Cresent Mall");
+            objExtraData.put("screen_code", 0);
+            objExtraData.put("screen_name", "Special");
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+            objExtraData.put("movie_format", "2D");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         if ( args != null ) {
             try {
                 this.amount  = Integer.parseInt(args.getJSONOject(0).getString("amout"));
@@ -81,6 +95,7 @@ public class MomoWallet extends CordovaPlugin {
                 this.merchantNameLabel  = args.getJSONOject(0).getString("merchantNameLabel");
                 this.total_fee  = args.getJSONOject(0).getString("total_fee");
                 this.description  = args.getJSONOject(0).getString("description");
+                this.objExtraData  = args.getJSONOject(0).getJSONOject("extraData");
 
             }catch( Exception ex) {
                 this.callbackContext.error("loi json oblect");
@@ -109,19 +124,8 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("partnerCode", this.merchantCode );
 
 
-        // Example extra data
-        JSONObject objExtraData = new JSONObject();
-        try {
-            objExtraData.put("site_code", "008");
-            objExtraData.put("site_name", "CGV Cresent Mall");
-            objExtraData.put("screen_code", 0);
-            objExtraData.put("screen_name", "Special");
-            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
-            objExtraData.put("movie_format", "2D");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            this.callbackContext.error("this error database");
-        }
+        
+        
         eventValue.put("extraData", objExtraData.toString());
         eventValue.put("requestType", "payment");
         eventValue.put("language", "vi");
