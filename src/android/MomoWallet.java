@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.widget.Toast;
-import jdk.nashorn.internal.parser.JSONParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class MomoWallet extends CordovaPlugin {
  
 
     @Override
-    private boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         
      
@@ -74,14 +73,28 @@ public class MomoWallet extends CordovaPlugin {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
+
+        // Example extra data
+        JSONObject objExtraData = new JSONObject();
+
+        try {
+            objExtraData.put("site_code", "008");
+            objExtraData.put("site_name", "CGV Cresent Mall");
+            objExtraData.put("screen_code", 0);
+            objExtraData.put("screen_name", "Special");
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+            objExtraData.put("movie_format", "2D");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         
-         // Example extra data
-         JSONObject objRequestData = new JSONObject();
+         
 
         if ( args != null ) {
-           
+            // Example request data
+            JSONObject objRequestData = new JSONObject();
             try {
-                objRequestData = args.getJSONOject(0); 
+                objRequestData = args.getJSONObject(0); 
 
                 this.amount  = objRequestData.getString("amout").toString();
                 this.merchantName  = objRequestData.getString("merchantName").toString();
@@ -91,7 +104,7 @@ public class MomoWallet extends CordovaPlugin {
                 this.merchantNameLabel  = objRequestData.getString("merchantNameLabel").toString();
                 this.total_fee  = objRequestData.getString("total_fee").toString();
                 this.description  = objRequestData.getString("description").toString();
-                // this.objExtraData  =  args.getJSONOject(0).getJSONOject("extraData");
+                this.objExtraData  =  args.getJSONOject(0).getJSONObject("extraData");
 
             }catch( Exception ex) {
                 this.callbackContext.error("loi json oblect");
@@ -122,19 +135,7 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("partnerCode", this.merchantCode );
 
 
-        // Example extra data
-        JSONObject objExtraData = new JSONObject();
-
-        try {
-            objExtraData.put("site_code", "008");
-            objExtraData.put("site_name", "CGV Cresent Mall");
-            objExtraData.put("screen_code", 0);
-            objExtraData.put("screen_name", "Special");
-            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
-            objExtraData.put("movie_format", "2D");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        
         
         
         eventValue.put("extraData", objExtraData.toString());
@@ -146,7 +147,7 @@ public class MomoWallet extends CordovaPlugin {
     }
 
     // Get token callback from MoMo app an submit to server side
-    private void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             if (data != null) {
