@@ -21,9 +21,11 @@ id="cordova-plugin-momo-wallet" version="0.0.1">
             <feature name="MomoWallet">
                 <param name="android-package" value="cordova.plugin.momo.wallet.MomoWallet" />
             </feature>
+
+            <preference name="AndroidLaunchMode" value="singleTop" />
         </config-file>
 
-        <preference name="AndroidLaunchMode" value="singleTop" />
+        
 
         <config-file parent="/*" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.INTERNET" />
