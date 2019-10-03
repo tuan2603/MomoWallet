@@ -104,7 +104,7 @@ public class MomoWallet extends CordovaPlugin {
                 this.merchantNameLabel  = objRequestData.getString("merchantNameLabel").toString();
                 this.total_fee  = objRequestData.getString("total_fee").toString();
                 this.description  = objRequestData.getString("description").toString();
-                this.objExtraData  =  new JSONObject(args.getJSONObject(0).getString("extraData"));
+                objExtraData  =  new JSONObject(args.getJSONObject(0).getString("extraData"));
 
             }catch( Exception ex) {
                 this.callbackContext.error("loi json oblect");
