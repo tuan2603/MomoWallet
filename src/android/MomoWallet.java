@@ -83,7 +83,7 @@ public class MomoWallet extends CordovaPlugin {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         //Set token tracking
-        AppMoMoLib.getInstance().setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNT01PIiwiY3JlYXRlZCI6IlR1ZSBEZWMgMjUgMTU6NTA6MzIgSUNUIDIwMTgiLCJpYXQiOjE1NDU3Mjc4MzJ9.0tv2FgQhFFXcO7vK2lEoTUcduxpCe15siOnbnEjls9E");
+        // AppMoMoLib.getInstance().setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNT01PIiwiY3JlYXRlZCI6IlR1ZSBEZWMgMjUgMTU6NTA6MzIgSUNUIDIwMTgiLCJpYXQiOjE1NDU3Mjc4MzJ9.0tv2FgQhFFXcO7vK2lEoTUcduxpCe15siOnbnEjls9E");
 
 
         // Example extra data
@@ -164,9 +164,8 @@ public class MomoWallet extends CordovaPlugin {
 
     // Get token callback from MoMo app an submit to server side
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        AppMoMoLib.getInstance().trackEventResult(this,data);//request tracking result data
         if(requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             Log.d("requestpayment", String.valueOf(data));
             if (data != null) {
