@@ -1,9 +1,20 @@
-package com.trantuan;
+package cordova.plugin.momo.wallet;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,10 +43,6 @@ public class MomoWallet extends CordovaPlugin {
 
     private CallbackContext callbackContext;
 
-    private interface FileOp {
-        void run(JSONArray args) throws Exception;
-    }
-
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
@@ -47,7 +54,7 @@ public class MomoWallet extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         if (action.equals("coolMethod")) {
-            this.coolMethod();
+            this.coolMethod("Tran Minh Tuan",callbackContext);
             return true;
          }
      
@@ -60,7 +67,7 @@ public class MomoWallet extends CordovaPlugin {
          return false;
     }
 
-    private void coolMethod(String message, CallbackContext callbackContext) {
+    public void coolMethod(String message, CallbackContext callbackContext) {
 
         if (message != null && message.length() > 0) {
             callbackContext.success(message);
@@ -70,16 +77,19 @@ public class MomoWallet extends CordovaPlugin {
     }
 
     // Get token through MoMo app
-    private void requestPayment(String edAmount, CallbackContext callbackContext) {
+    public void requestPayment(String edAmount, CallbackContext callbackContext) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
-        mount = edAmount.getText().toString().trim();
+        
 
-        if (mount != null && mount.length() > 0) {
-            callbackContext.success(mount);
+        if (edAmount.toString()  != null && edAmount.toString().length() > 0) {
+            mount = edAmount.toString();
+            
         } else {
             callbackContext.error("mount one non-empty string argument.");
         }
+
+       
 
         Map<String, Object> eventValue = new HashMap<>();
         // client Required
@@ -109,7 +119,7 @@ public class MomoWallet extends CordovaPlugin {
             objExtraData.put("movie_format", "2D");
         } catch (JSONException e) {
             e.printStackTrace();
-            callbackContext.error( e.printStackTrace());
+            callbackContext.error( e.printStackTrace().toString());
         }
         eventValue.put("extraData", objExtraData.toString());
 
@@ -119,7 +129,7 @@ public class MomoWallet extends CordovaPlugin {
     }
 
     // Get token callback from MoMo app an submit to server side
-    private void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             if (data != null) {
@@ -141,30 +151,30 @@ public class MomoWallet extends CordovaPlugin {
                         this.callbackContext.success(token);
                     } else {
                         // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
-                        Toast.makeText(cordova.getActivity(), "message: " + this.getString(R.string.not_receive_info) , Toast.LENGTH_LONG).show();
+                        this.callbackContext.error("not_receive_info"); 
                     }
                 } else if (data.getIntExtra("status", -1) == 1) {
                     // TOKEN FAIL
                     String message = data.getStringExtra("message") != null ? data.getStringExtra("message")
                             : "Thất bại";
                     // tvMessage.setText("message: " + message);
-                    Toast.makeText(cordova.getActivity(), "message: " + message, Toast.LENGTH_LONG).show();
+                    this.callbackContext.error(message);
                 } else if (data.getIntExtra("status", -1) == 2) {
                     // TOKEN FAIL
                     // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
-                    Toast.makeText(cordova.getActivity(), "message: " + this.getString(R.string.not_receive_info), Toast.LENGTH_LONG).show();
+                    this.callbackContext.error("not_receive_info");
                 } else {
                     // TOKEN FAIL
                     // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
-                    Toast.makeText(cordova.getActivity(), "message: " +  this.getString(R.string.not_receive_info), Toast.LENGTH_LONG).show();
+                    this.callbackContext.error("not_receive_info");
                 }
             } else {
                 // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
-                Toast.makeText(cordova.getActivity(), "message: " + this.getString(R.string.not_receive_info), Toast.LENGTH_LONG).show();
+                this.callbackContext.error("not_receive_info");
             }
         } else {
             // tvMessage.setText("message: " + this.getString(R.string.not_receive_info_err));
-            Toast.makeText(cordova.getActivity(), "message: " + this.getString(R.string.not_receive_info_err), Toast.LENGTH_LONG).show();
+            this.callbackContext.error("not_receive_info");
         }
     }
 

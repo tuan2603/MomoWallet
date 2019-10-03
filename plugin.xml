@@ -19,15 +19,15 @@ id="cordova-plugin-momo-wallet" version="0.0.1">
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="MomoWallet">
-                <param name="android-package" value="com.trantuan.MomoWallet" />
+                <param name="android-package" value="cordova.plugin.momo.wallet.MomoWallet" />
             </feature>
         </config-file>
-        <config-file parent="/*" target="AndroidManifest.xml" />
-        <config-file target="AndroidManifest.xml" parent="/*">
+        
+        <config-file parent="/*" target="AndroidManifest.xml" 
             <uses-permission android:name="android.permission.INTERNET" />
          </config-file>
 
-        <source-file src="src/android/MomoWallet.java" target-dir="src/com/trantuant/MomoWallet" />
+        <source-file src="src/android/MomoWallet.java" target-dir="src/com/cordova/plugin/momo/wallet/MomoWallet" />
 
         <framework src="com.github.momodevelopment:androidsdkV2.2:2.3" />
 
