@@ -54,13 +54,19 @@ public class MomoWallet extends CordovaPlugin {
  
 
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action,final JSONArray args,final CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
         
      
          if (action.equals("requestPayment")) {
-            this.requestPayment(args);
-            return true;
+
+             cordova.getThreadPool().execute(new Runnable() {
+                 @Override
+                 public void run() {
+                     requestPayment(args);
+                 }
+             });
+             return true;
          }
     
          return false;
@@ -69,7 +75,7 @@ public class MomoWallet extends CordovaPlugin {
    
 
     // Get token through MoMo app
-    private void requestPayment(JSONArray args) {
+    public void requestPayment(JSONArray args) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
         
@@ -94,9 +100,11 @@ public class MomoWallet extends CordovaPlugin {
             // Example request data
             JSONObject objRequestData = new JSONObject();
             try {
-                objRequestData = args.getJSONObject(0); 
+                objRequestData = args.getJSONObject(0);
 
-                this.amount  = objRequestData.getString("amout").toString();
+                Log.d("aaa", objRequestData.toString());
+
+                this.amount  = objRequestData.getString("amount").toString();
                 this.merchantName  = objRequestData.getString("merchantName").toString();
                 this.merchantCode  = objRequestData.getString("merchantCode").toString();
                 this.orderId  = objRequestData.getString("orderId").toString();
@@ -104,7 +112,7 @@ public class MomoWallet extends CordovaPlugin {
                 this.merchantNameLabel  = objRequestData.getString("merchantNameLabel").toString();
                 this.total_fee  = objRequestData.getString("total_fee").toString();
                 this.description  = objRequestData.getString("description").toString();
-                objExtraData  =  new JSONObject(args.getJSONObject(0).getString("extraData"));
+                objExtraData  =  new JSONObject(args.getJSONObject(0).getString("objExtraData"));
 
             }catch( Exception ex) {
                 this.callbackContext.error("loi json oblect");
@@ -144,12 +152,17 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("extra", "");
         AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
 
+
+
     }
 
     // Get token callback from MoMo app an submit to server side
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("aa", String.valueOf(AppMoMoLib.getInstance().REQUEST_CODE_MOMO));
         if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+            Log.d("requestpayment", String.valueOf(data));
             if (data != null) {
                 if (data.getIntExtra("status", -1) == 0) {
                     // TOKEN IS AVAILABLE
@@ -169,29 +182,36 @@ public class MomoWallet extends CordovaPlugin {
                         this.callbackContext.success(token);
                     } else {
                         // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
-                        this.callbackContext.error("not_receive_info"); 
+                        Log.d("requestpayment", "1");
+                        this.callbackContext.error("not_receive_info");
                     }
                 } else if (data.getIntExtra("status", -1) == 1) {
                     // TOKEN FAIL
                     String message = data.getStringExtra("message") != null ? data.getStringExtra("message")
                             : "Thất bại";
                     // tvMessage.setText("message: " + message);
+                    Log.d("requestpayment", "2" + message);
                     this.callbackContext.error(message);
                 } else if (data.getIntExtra("status", -1) == 2) {
                     // TOKEN FAIL
                     // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
+                    Log.d("requestpayment", "3");
                     this.callbackContext.error("not_receive_info");
                 } else {
                     // TOKEN FAIL
                     // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
+                    Log.d("requestpayment", "4");
                     this.callbackContext.error("not_receive_info");
+
                 }
             } else {
                 // tvMessage.setText("message: " + this.getString(R.string.not_receive_info));
+                Log.d("requestpayment", "5");
                 this.callbackContext.error("not_receive_info");
             }
         } else {
             // tvMessage.setText("message: " + this.getString(R.string.not_receive_info_err));
+            Log.d("requestpayment", "6");
             this.callbackContext.error("not_receive_info");
         }
     }
