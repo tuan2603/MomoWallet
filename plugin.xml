@@ -23,16 +23,7 @@ id="cordova-plugin-momo-wallet" version="0.0.1">
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="cordova.plugin.momo.wallet"
-                android:label="Momo Wallet">
-                <intent-filter>
-                <!-- We are going to use this name to start the activity later in Java -->
-                <action android:name="cordova.plugin.momo.wallet.MomoWallet" />
-                <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-            </activity>
-        </config-file>
+        <preference name="AndroidLaunchMode" value="singleTop" />
 
         <config-file parent="/*" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.INTERNET" />

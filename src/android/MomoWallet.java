@@ -156,6 +156,8 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("requestType", "payment");
         eventValue.put("language", "vi");
         eventValue.put("extra", "");
+
+        cordova.setActivityResultCallback(cordova.getActivity());
         AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
 
 
@@ -219,6 +221,22 @@ public class MomoWallet extends CordovaPlugin {
             Log.d("requestpayment", "6");
             this.callbackContext.error("not_receive_info");
         }
+    }
+
+    public Bundle onSaveInstanceState() {
+        Log.d("requestpayment", "7");
+    }
+
+    /**
+     * Called when a plugin is the recipient of an Activity result after the
+     * CordovaActivity has been destroyed. The Bundle will be the same as the one
+     * the plugin returned in onSaveInstanceState()
+     *
+     * @param state             Bundle containing the state of the plugin
+     * @param callbackContext   Replacement Context to return the plugin result to
+     */
+    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+        Log.d("requestpayment", "9");
     }
 
 }
