@@ -26,12 +26,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import vn.momo.momo_partner.AppMoMoLib;
 import vn.momo.momo_partner.MoMoParameterNamePayment;
-
-
 
 /**
  * This class echoes a string called from JavaScript.
@@ -82,9 +78,7 @@ public class MomoWallet extends CordovaPlugin {
     public void requestPayment(JSONArray args) {
         AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
         AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
-        //Set token tracking
-        // AppMoMoLib.getInstance().setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNT01PIiwiY3JlYXRlZCI6IlR1ZSBEZWMgMjUgMTU6NTA6MzIgSUNUIDIwMTgiLCJpYXQiOjE1NDU3Mjc4MzJ9.0tv2FgQhFFXcO7vK2lEoTUcduxpCe15siOnbnEjls9E");
-
+        
 
         // Example extra data
         JSONObject objExtraData = new JSONObject();
@@ -156,8 +150,6 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("requestType", "payment");
         eventValue.put("language", "vi");
         eventValue.put("extra", "");
-
-        // cordova.setActivityResultCallback(MomoWallet.this);
         AppMoMoLib.getInstance().requestMoMoCallBack(cordova.getActivity(), eventValue);
 
 
@@ -168,7 +160,8 @@ public class MomoWallet extends CordovaPlugin {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+        Log.d("aa", String.valueOf(AppMoMoLib.getInstance().REQUEST_CODE_MOMO));
+        if (requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
             Log.d("requestpayment", String.valueOf(data));
             if (data != null) {
                 if (data.getIntExtra("status", -1) == 0) {
@@ -221,19 +214,6 @@ public class MomoWallet extends CordovaPlugin {
             Log.d("requestpayment", "6");
             this.callbackContext.error("not_receive_info");
         }
-    }
-
-
-    /**
-     * Called when a plugin is the recipient of an Activity result after the
-     * CordovaActivity has been destroyed. The Bundle will be the same as the one
-     * the plugin returned in onSaveInstanceState()
-     *
-     * @param state             Bundle containing the state of the plugin
-     * @param callbackContext   Replacement Context to return the plugin result to
-     */
-    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
-        Log.d("requestpayment", "9");
     }
 
 }
