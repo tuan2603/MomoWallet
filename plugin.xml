@@ -7,7 +7,7 @@ id="cordova-plugin-momo-wallet" version="0.0.1">
     <name>MomoWallet</name>
 
     <js-module name="MomoWallet" src="www/MomoWallet.js">
-        <clobbers target="cordova.plugin.momo.wallet.MomoWallet" />
+        <clobbers target="cordova.plugin.MomoWallet" />
     </js-module>
     
     <engines>
