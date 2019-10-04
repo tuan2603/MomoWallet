@@ -146,7 +146,7 @@ public class MomoWallet extends CordovaPlugin {
         eventValue.put("language", "vi");
         eventValue.put("extra", "");
 
-        AppMoMoLib.getInstance().requestMoMoCallBack((CordovaPlugin) this, eventValue);
+        AppMoMoLib.getInstance().requestMoMoCallBack( this.cordova.getActivity(), eventValue);
 
 
 
@@ -232,7 +232,7 @@ public class MomoWallet extends CordovaPlugin {
         }
 
         // Handle other results if exists.
-        super.onActivityResult(requestCode, resultCode, data);
+        // super.onActivityResult(requestCode, resultCode, data);
     }
 
 }
